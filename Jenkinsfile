@@ -5,13 +5,13 @@ pipeline {
         stage('Clone git repo') {
             steps {
                 sh 'echo "STAGE 0: Cloning app code from SCM ..."'
-                git 'https://github.com/mudathirlawal/cicd-with-jenkins-docker-and-aws-eks.git'
+                git 'https://github.com/rakeshdevopsguru/cicd-with-jenkins-docker-eks.git'
             }    
         }        
         stage('Lint all app code') {
             steps {
-                sh 'echo "STAGE 1: Checking app code for syntax error ..."'
-                sh 'tidy -q -e *.html'
+                //sh 'echo "STAGE 1: Checking app code for syntax error ..."'
+                //sh 'tidy -q -e *.html'
             }
         }   
         stage( 'Build docker image for app' ) {
@@ -26,8 +26,8 @@ pipeline {
                 withDockerRegistry([url: "", credentialsId: "dockerhub"]) {
                     sh 'echo "STAGE 3: Uploading image to dockerhub repository ..."'
                     sh 'docker login'
-                    sh 'docker tag web-app:v1.0 nigercode/web-app:v1.0'
-                    sh 'docker push nigercode/web-app:v1.0'          
+                    sh 'docker tag web-app:v1.0 rakesh1533/webapp:v1.0'
+                    sh 'docker push rakesh1533/webapp:v1.0'          
                 }
             }
         }                                   
