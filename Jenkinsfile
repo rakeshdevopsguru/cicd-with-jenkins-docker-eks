@@ -10,8 +10,8 @@ pipeline {
         }        
         stage('Lint all app code') {
             steps {
-                //sh 'echo "STAGE 1: Checking app code for syntax error ..."'
-                //sh 'tidy -q -e *.html'
+                sh 'echo "STAGE 1: Checking app code for syntax error ..."'
+               
             }
         }   
         stage( 'Build docker image for app' ) {
