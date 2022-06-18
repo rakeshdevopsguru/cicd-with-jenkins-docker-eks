@@ -32,11 +32,24 @@ pipeline {
             }
         }                                   
         stage( 'Deploy image to AWS EKS' ) {
-             kubernetesDeploy(
-               configs: 'templates/*',
-               kubeconfigId: 'K8S',
-               enableConfigSubstitution: true
-               )  
+            steps {
+                withAWS( region:'us-east-1', credentials:'k8s' ) {
+                    sh 'echo "STAGE 4: Deploying image to AWS EKS cluster ..."'
+                    sh 'aws eks --region us-east-1 update-kubeconfig --name dev'
+                    sh 'kubectl config use-context arn:aws:eks:us-east-1:548633167931:cluster/dev'            
+                    sh 'kubectl set image deployment web-app web-app=nigercode/web-app:v1.0'
+                    sh 'kubectl rollout status deployment web-app'
+                    sh 'kubectl apply -f templates/deployment.yml'
+                    sh 'kubectl apply -f templates/loadbalancer.yml'
+                    sh 'kubectl apply -f templates/aws-auth-cm.yml'
+                    sh 'kubectl get nodes --all-namespaces'
+                    sh 'kubectl get deployment'
+                    sh 'kubectl get pod -o wide'
+                    sh 'kubectl get service/web-app'
+                    sh 'echo "Congratulations! Deployment successful."'
+                    sh 'kubectl describe deployment/web-app'
+                }
             }
         }               
     }
+}
