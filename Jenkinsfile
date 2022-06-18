@@ -32,6 +32,11 @@ pipeline {
             }
         }                                   
         stage( 'Deploy image to AWS EKS' ) {
+             kubernetesDeploy(
+                //configs: 'MyAwesomeApp/springboot-lb.yaml',
+                kubeconfigId: 'K8S',
+                enableConfigSubstitution: true
+                    )  
             steps {
                 withAWS( region:'us-east-1', credentials:'k8s' ) {
                     sh 'echo "STAGE 4: Deploying image to AWS EKS cluster ..."'
