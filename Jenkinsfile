@@ -37,6 +37,7 @@ pipeline {
                 kubeconfigId: 'K8S',
                 enableConfigSubstitution: true
                     )  
+        }
             steps {
                 withAWS( region:'us-east-1', credentials:'k8s' ) {
                     sh 'echo "STAGE 4: Deploying image to AWS EKS cluster ..."'
@@ -53,7 +54,7 @@ pipeline {
                     sh 'kubectl get service/web-app'
                     sh 'echo "Congratulations! Deployment successful."'
                     sh 'kubectl describe deployment/web-app'
-                }
+                
             }
         }               
     }
